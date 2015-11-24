@@ -29,10 +29,13 @@ THE SOFTWARE.
 
 #include "base/CCDirector.h"
 #include "base/CCAsyncTaskPool.h"
+#include "base/CCEventDispatcher.h"
+#include "base/base64.h"
 #include "renderer/CCCustomCommand.h"
 #include "renderer/CCRenderer.h"
 #include "platform/CCImage.h"
 #include "platform/CCFileUtils.h"
+#include "2d/CCSprite.h"
 
 NS_CC_BEGIN
 
@@ -151,14 +154,26 @@ void onCaptureScreen(const std::function<void(bool, const std::string&)>& afterC
 /*
  * Capture screen interface
  */
+static EventListenerCustom* s_captureScreenListener;
+static CustomCommand s_captureScreenCommand;
 void captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename)
 {
-    static CustomCommand captureScreenCommand;
-    captureScreenCommand.init(std::numeric_limits<float>::max());
-    captureScreenCommand.func = std::bind(onCaptureScreen, afterCaptured, filename);
-    Director::getInstance()->getRenderer()->addCommand(&captureScreenCommand);
+    if (s_captureScreenListener)
+    {
+        CCLOG("Warning: CaptureScreen has been called already, don't call more than once in one frame.");
+        return;
+    }
+    s_captureScreenCommand.init(std::numeric_limits<float>::max());
+    s_captureScreenCommand.func = std::bind(onCaptureScreen, afterCaptured, filename);
+    s_captureScreenListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_DRAW, [](EventCustom *event) {
+        auto director = Director::getInstance();
+        director->getEventDispatcher()->removeEventListener((EventListener*)(s_captureScreenListener));
+        s_captureScreenListener = nullptr;
+        director->getRenderer()->addCommand(&s_captureScreenCommand);
+        director->getRenderer()->render();
+    });
 }
-    
+
 std::vector<Node*> findChildren(const Node &node, const std::string &name)
 {
     std::vector<Node*> vec;
@@ -212,7 +227,7 @@ Rect getCascadeBoundingBox(Node *node)
     Rect cbb;
     Size contentSize = node->getContentSize();
     
-    // check all childrens bounding box, get maximize box
+    // check all children bounding box, get maximize box
     Node* child = nullptr;
     bool merge = false;
     for(auto object : node->getChildren())
@@ -250,7 +265,28 @@ Rect getCascadeBoundingBox(Node *node)
     
     return cbb;
 }
+
+Sprite* createSpriteFromBase64(const char* base64String)
+{
+    unsigned char* decoded;
+    int length = base64Decode((const unsigned char*) base64String, (unsigned int) strlen(base64String), &decoded);
+
+    Image *image = new Image();
+    bool imageResult = image->initWithImageData(decoded, length);
+    CCASSERT(imageResult, "Failed to create image from base64!");
+    free(decoded);
+
+    Texture2D *texture = new Texture2D();
+    texture->initWithImage(image);
+    texture->setAliasTexParameters();
+    image->release();
+
+    Sprite* sprite = Sprite::createWithTexture(texture);
+    texture->release();
     
+    return sprite;
+}
+
 }
 
 NS_CC_END
