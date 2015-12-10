@@ -36,6 +36,7 @@ NS_CC_BEGIN
  */
 
 class Sprite;
+struct CC_DLL ResourceData;
 
 namespace ui {
     class Scale9Sprite;
@@ -264,7 +265,12 @@ public:
      */
     float getZoomScale()const;
 
-    
+    ResourceData getBackFile();
+    ResourceData getProgressBarFile();
+    ResourceData getBallNormalFile();
+    ResourceData getBallPressedFile();
+    ResourceData getBallDisabledFile();
+
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
 
@@ -309,8 +315,6 @@ protected:
     bool _prevIgnoreSize;
     
     float _zoomScale;
-    float _sliderBallNormalTextureScaleX;
-    float _sliderBallNormalTextureScaleY;
 
     bool _isSliderBallPressedTextureLoaded;
     bool _isSliderBallDisabledTexturedLoaded;
@@ -341,6 +345,12 @@ protected:
     TextureResType _ballDTexType;
     bool _barRendererAdaptDirty;
     bool _progressBarRendererDirty;
+
+    std::string _textureFile;
+    std::string _progressBarTextureFile;
+    std::string _slidBallNormalTextureFile;
+    std::string _slidBallPressedTextureFile;
+    std::string _slidBallDisabledTextureFile;
 };
 
 }
