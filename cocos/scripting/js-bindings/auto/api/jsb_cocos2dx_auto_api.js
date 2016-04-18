@@ -3323,9 +3323,9 @@ tasktype
 },
 
 /**
- * @method destoryInstance
+ * @method destroyInstance
  */
-destoryInstance : function (
+destroyInstance : function (
 )
 {
 },
@@ -3493,6 +3493,15 @@ reverse : function (
 )
 {
     return cc.Action;
+},
+
+/**
+ * @method Action
+ * @constructor
+ */
+Action : function (
+)
+{
 },
 
 };
@@ -13820,6 +13829,16 @@ node
 },
 
 /**
+ * @method getString
+ * @return {String}
+ */
+getString : function (
+)
+{
+    return ;
+},
+
+/**
  * @method getDisabledColor
  * @return {color3b_object}
  */
@@ -20297,6 +20316,16 @@ int
 },
 
 /**
+ * @method getUniformFlags
+ * @return {cc.GLProgram::UniformFlags}
+ */
+getUniformFlags : function (
+)
+{
+    return cc.GLProgram::UniformFlags;
+},
+
+/**
  * @method getUniformLocationForName
  * @param {char} arg0
  * @return {int}
@@ -21966,7 +21995,7 @@ cc.TextFieldTTF = {
 
 /**
  * @method getCharCount
- * @return {int}
+ * @return {unsigned long}
  */
 getCharCount : function (
 )
@@ -21975,10 +22004,30 @@ getCharCount : function (
 },
 
 /**
+ * @method setCursorChar
+ * @param {char} arg0
+ */
+setCursorChar : function (
+char 
+)
+{
+},
+
+/**
  * @method setSecureTextEntry
  * @param {bool} arg0
  */
 setSecureTextEntry : function (
+bool 
+)
+{
+},
+
+/**
+ * @method setCursorEnabled
+ * @param {bool} arg0
+ */
+setCursorEnabled : function (
 bool 
 )
 {
@@ -22015,6 +22064,36 @@ float
 },
 
 /**
+ * @method appendString
+ * @param {String} arg0
+ */
+appendString : function (
+str 
+)
+{
+},
+
+/**
+ * @method getPasswordTextStyle
+ * @return {String}
+ */
+getPasswordTextStyle : function (
+)
+{
+    return ;
+},
+
+/**
+ * @method setPasswordTextStyle
+ * @param {String} arg0
+ */
+setPasswordTextStyle : function (
+str 
+)
+{
+},
+
+/**
  * @method setColorSpaceHolder
 * @param {color4b_object|color3b_object} color4b
 */
@@ -22045,6 +22124,18 @@ str
 },
 
 /**
+ * @method setCursorFromPoint
+ * @param {vec2_object} arg0
+ * @param {cc.Camera} arg1
+ */
+setCursorFromPoint : function (
+vec2, 
+camera 
+)
+{
+},
+
+/**
  * @method isSecureTextEntry
  * @return {bool}
  */
@@ -22062,6 +22153,16 @@ getPlaceHolder : function (
 )
 {
     return ;
+},
+
+/**
+ * @method setCursorPosition
+ * @param {unsigned long} arg0
+ */
+setCursorPosition : function (
+long 
+)
+{
 },
 
 /**

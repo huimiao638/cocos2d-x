@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-#include "AudioEngine-inl.h"
+#include "audio/android/AudioEngine-inl.h"
 
 #include <unistd.h>
 // for native asset manager
@@ -321,7 +321,7 @@ void AudioEngineImpl::setVolume(int audioID,float volume)
     }
     auto result = (*player._fdPlayerVolume)->SetVolumeLevel(player._fdPlayerVolume, dbVolume);
     if(SL_RESULT_SUCCESS != result){
-        log("%s error:%u",__func__, result);
+        log("%s error:%lu", __func__, result);
     }
 }
 
@@ -341,7 +341,7 @@ void AudioEngineImpl::pause(int audioID)
     auto& player = _audioPlayers[audioID];
     auto result = (*player._fdPlayerPlay)->SetPlayState(player._fdPlayerPlay, SL_PLAYSTATE_PAUSED);
     if(SL_RESULT_SUCCESS != result){
-        log("%s error:%u",__func__, result);
+        log("%s error:%lu", __func__, result);
     }
 }
 
@@ -350,7 +350,7 @@ void AudioEngineImpl::resume(int audioID)
     auto& player = _audioPlayers[audioID];
     auto result = (*player._fdPlayerPlay)->SetPlayState(player._fdPlayerPlay, SL_PLAYSTATE_PLAYING);
     if(SL_RESULT_SUCCESS != result){
-        log("%s error:%u",__func__, result);
+        log("%s error:%lu", __func__, result);
     }
 }
 
@@ -359,7 +359,7 @@ void AudioEngineImpl::stop(int audioID)
     auto& player = _audioPlayers[audioID];
     auto result = (*player._fdPlayerPlay)->SetPlayState(player._fdPlayerPlay, SL_PLAYSTATE_STOPPED);
     if(SL_RESULT_SUCCESS != result){
-        log("%s error:%u",__func__, result);
+        log("%s error:%lu", __func__, result);
     }
 
     /*If destroy openSL object immediately,it may cause dead lock.
